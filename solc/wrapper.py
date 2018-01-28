@@ -50,7 +50,13 @@ def solc_wrapper(solc_binary=None,
                  standard_json=None,
                  success_return_code=0):
     if solc_binary is None:
-        solc_binary = get_solc_binary_path()
+        try:
+            solc.utils.filesystem.is_executable_available(solc_binary)
+        except FileNotFoundError:
+            print("The solc compiler binary could not be found.")
+        else:
+            solc_binary = get_solc_binary_path()
+        
 
     command = [solc_binary]
 
